@@ -1,2 +1,2 @@
 # GradAug
-[NIPS'20] GradAug: A New Regularization Method for Deep Neural Networks
+Codes will be available soon!
