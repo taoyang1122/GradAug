@@ -1,2 +1,2 @@
-# GradAug
-Codes will be available soon!
+# GradAug: A New Regularization Method for Deep Neural Networks (NeurIPS'20)
+This work proposes to utilize randomly transformed training samples to regularize a set of sub-networks. The motivation is that a well-generalized network, and its sub-networks, should recognize transformed images as the same object. The proposed method is simple, general yet effective. It achieves state-of-the-art performance on ImageNet and Cifar classification, and can further improve downstream tasks such as object detection and instance segmentation. The effectiveness is also validated on model robustness and low data regimes.
