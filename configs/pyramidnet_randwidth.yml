@@ -1,0 +1,35 @@
+# data
+dataset: cifar100
+workers: 4
+
+# info
+num_classes: 100
+image_size: 32
+topk: [1, 5]
+start_epoch: 0
+epochs: 300
+print_freq: 100
+batch_size: 64
+
+# optimizer
+optimizer: sgd
+momentum: 0.9
+weight_decay: 0.0001
+nesterov: True
+
+# lr
+lr: 0.25
+lr_scheduler: multistep
+multistep_lr_milestones: [150, 225]
+
+# model
+model: pyramidnet
+depth: 200
+alpha: 240
+max_width: 1.0
+min_width: 0.8
+num_subnet: 3
+resos: [32, 28, 24]
+reset_parameters: True
+resume: ''
+log_dir: logs/pyramidnet200_randwidth/
