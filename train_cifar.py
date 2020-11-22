@@ -90,7 +90,7 @@ def main():
         else:
             print("=> no checkpoint found at '{}'".format(FLAGS.resume))
 
-    cudnn.benchmark = True
+    # cudnn.benchmark = True
 
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda()
@@ -143,7 +143,6 @@ def train(train_loader, model, criterion, optimizer, scheduler, epoch):
         # GradAug training
         max_width = FLAGS.max_width
         min_width = FLAGS.min_width
-        # min_width = 1.0
         width_mult_list = [min_width]
         sampled_width = list(np.random.uniform(min_width, max_width, FLAGS.num_subnet-1))
         width_mult_list.extend(sampled_width)
@@ -184,8 +183,6 @@ def train(train_loader, model, criterion, optimizer, scheduler, epoch):
                   'Prec@5 {top5.val:.3f} ({top5.avg:.3f})'.format(
                       epoch, i, len(train_loader), optimizer.param_groups[0]['lr'], batch_time=batch_time, data_time=data_time,
                       loss=losses, top1=top1, top5=top5))
-
-        break
 
 
 def validate(val_loader, model, criterion, epoch):
