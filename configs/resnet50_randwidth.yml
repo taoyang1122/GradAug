@@ -1,0 +1,33 @@
+# data
+dataset: imagenet
+dataset_dir: /home/ubuntu/yang/data/ImageNet/ILSVRC/Data/CLS-LOC/
+workers: 8
+
+# info
+num_classes: 1000
+image_size: 224
+image_resize: 256
+topk: [1, 5]
+epochs: 120
+print_freq: 100
+batch_size: 256
+
+# optimizer
+optimizer: sgd
+momentum: 0.9
+weight_decay: 0.0001
+nesterov: True
+
+# lr
+lr: 0.2
+lr_scheduler: cosine
+
+# model
+model: models.resnet_randwidth
+depth: 50
+max_width: 1.0
+min_width: 0.9
+num_subnet: 3
+resos: [224, 192, 160, 128]
+reset_parameters: True
+log_dir: logs/resnet50_randwidth/
