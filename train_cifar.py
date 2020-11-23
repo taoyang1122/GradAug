@@ -101,6 +101,14 @@ def main():
     # cosine learning rate
     scheduler = get_lr_scheduler(optimizer, train_loader)
 
+    if FLAGS.test_only:
+        ckpt = torch.load(FLAGS.pretrained)
+        model.load_state_dict(ckpt['state_dict'], strict=True)
+        print('Load pretrained weights from ', FLAGS.pretrained)
+        acc1, acc5 = validate(val_loader, model, criterion, 0)
+        print('Top-1 and 5 accuracy:', acc1, acc5)
+        return
+
     for epoch in range(FLAGS.start_epoch, FLAGS.epochs):
         # train for one epoch
         train(train_loader, model, criterion, optimizer, scheduler, epoch)

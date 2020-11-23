@@ -4,13 +4,7 @@ import torch.nn as nn
 from utils.config import FLAGS
 
 
-def make_divisible(v, divisor=8, min_value=1):
-    """
-    forked from slim:
-    https://github.com/tensorflow/models/blob/\
-    0344c5503ee55e24f0de7f37336a6e08f10976fd/\
-    research/slim/nets/mobilenet/mobilenet.py#L62-L69
-    """
+def make_divisible(v, divisor=1, min_value=1):
     if min_value is None:
         min_value = divisor
     new_v = max(min_value, int(v + divisor / 2) // divisor * divisor)
