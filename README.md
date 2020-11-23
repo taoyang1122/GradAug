@@ -18,3 +18,14 @@ To train PyramidNet-200,
 ```
 python train_cifar.py app:configs/pyramidnet_randwidth.yml
 ```
+# Citation
+If you find this useful in your work, please consider citing,
+```
+@article{yang2020gradaug,
+  title={GradAug: A New Regularization Method for Deep Neural Networks},
+  author={Yang, Taojiannan and Zhu, Sijie and Chen, Chen},
+  journal={Advances in Neural Information Processing Systems},
+  volume={33},
+  year={2020}
+}
+```
