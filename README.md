@@ -31,15 +31,26 @@ python train_cifar.py app:configs/pyramidnet_randwidth.yml
 
 |Model|FLOPs|Top-1|Top-5|
 |-----|-----|-----|-----|
-|+ResNet-50|4.1 G|76.32|92.95|
+|ResNet-50|4.1 G|76.32|92.95|
 |+Dropblock|4.1 G|78.13|94.02|
 |+Mixup|4.1 G|77.9|93.9|
 |+CutMix|4.1 G|78.60|94.08|
 |+StochDepth|4.1 G|77.53|93.73|
 |+ShakeDrop|4.1 G|77.5|-|
-|+GradAug|4.1 G|**78.78**|**94.43**|
+|+GradAug ([Model](https://drive.google.com/file/d/1_0aXi30ET4OrQY0j6KxTYXK0lkgo70Fh/view?usp=sharing))|4.1 G|**78.78**|**94.43**|
 |+bag of tricks|4.3 G|79.29|94.38|
-|+GradAug+CutMix|4.1 G|**79.67**|**94.93**|
+|+GradAug+CutMix ([Model](https://drive.google.com/file/d/1cmB3ZIK5-pWt2I37-Pf0I721xZq8MF_4/view?usp=sharing))|4.1 G|**79.67**|**94.93**|
+
+2. Cifar-100 classification accuracy. Note that we report the final-epoch results.
+
+|WideResNet-28-10|Top-1|Top-5|
+|----------------|-----|-----|
+|Baseline|81.53|95.59|
+|+Mixup|82.5|-|
+|+CutMix|84.08|96.28|
+|+ShakeDrop|81.65|96.19|
+|+GradAug|83.98|96.17|
+|+GradAug+CutMix|**85.35**|**96.85**|
 
 # Citation
 If you find this useful in your work, please consider citing,
