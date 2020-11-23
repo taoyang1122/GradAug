@@ -33,5 +33,5 @@ resos: [32, 28, 24]
 reset_parameters: True
 resume: ''
 log_dir: logs/pyramidnet200_randwidth/
-test_only: True
-pretrained: 'pretrained/prnet-cutmix.tar'
+test_only: False
+pretrained: ''

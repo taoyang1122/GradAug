@@ -32,5 +32,5 @@ resos: [32, 28, 24]
 reset_parameters: True
 resume: ''
 log_dir: logs/wideresnet28-10_randwidth/
-test_only: True
-pretrained: 'pretrained/wrnet-cutmix.tar'
+test_only: False
+pretrained: ''
