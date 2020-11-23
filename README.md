@@ -56,10 +56,10 @@ python train_cifar.py app:configs/pyramidnet_randwidth.yml
 |--------------|-----|-----|
 |Baseline|83.49|94.31|
 |+Mixup|84.37|96.01|
-|+CutMix|84.83|86.73|
+|+CutMix|84.83|96.73|
 |+ShakeDrop|84.57|97.08|
 |+GradAug|84.98|97.08|
-|+GradAug+CutMix ([Model](https://drive.google.com/file/d/1MZXH1u3fVijPF_yj7VoskqjNPOXBscQq/view?usp=sharing))|86.24|97.33|
+|+GradAug+CutMix ([Model](https://drive.google.com/file/d/1MZXH1u3fVijPF_yj7VoskqjNPOXBscQq/view?usp=sharing))|**86.24**|**97.33**|
 
 # Citation
 If you find this useful in your work, please consider citing,
