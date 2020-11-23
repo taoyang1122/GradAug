@@ -80,7 +80,13 @@ def main():
                                 weight_decay=FLAGS.weight_decay, nesterov=FLAGS.nesterov)
     lr_scheduler = get_lr_scheduler(optimizer, train_loader)
 
-
+    if FLAGS.test_only:
+        ckpt = torch.load(FLAGS.pretrained)
+        model.load_state_dict(ckpt['model'], strict=True)
+        print('Load pretrained weights from ', FLAGS.pretrained)
+        acc1, acc5, _ = validate(val_loader, model, criterion, 0)
+        print('Top-1 and 5 accuracy:', acc1, acc5)
+        return
 
     for epoch in range(0, FLAGS.epochs):
 
@@ -215,7 +221,7 @@ def validate(val_loader, model, criterion, epoch):
         end = time.time()
 
         if i % FLAGS.print_freq == 0:
-            print('Test (on val set): [{0}/{1}][{2}/{3}]\t'
+            logger.info('Test (on val set): [{0}/{1}][{2}/{3}]\t'
                   'Time {batch_time.val:.3f} ({batch_time.avg:.3f})\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
                   'Top 1-acc {top1.val:.4f} ({top1.avg:.4f})\t'
@@ -223,7 +229,7 @@ def validate(val_loader, model, criterion, epoch):
                 epoch, FLAGS.epochs, i, len(val_loader), batch_time=batch_time, loss=losses,
                 top1=top1, top5=top5))
 
-    print('* Epoch: [{0}/{1}]\t Top 1-acc {top1.avg:.3f}  Top 5-acc {top5.avg:.3f}\t Test Loss {loss.avg:.3f}'.format(
+    logger.info('* Epoch: [{0}/{1}]\t Top 1-acc {top1.avg:.3f}  Top 5-acc {top5.avg:.3f}\t Test Loss {loss.avg:.3f}'.format(
         epoch, FLAGS.epochs, top1=top1, top5=top5, loss=losses))
     return top1.avg, top5.avg, losses.avg
 

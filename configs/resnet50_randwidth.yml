@@ -31,3 +31,5 @@ num_subnet: 3
 resos: [224, 192, 160, 128]
 reset_parameters: True
 log_dir: logs/resnet50_randwidth/
+test_only: True
+pretrained: 'pretrained/r50-cutmix.pt'
