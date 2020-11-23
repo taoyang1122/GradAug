@@ -49,8 +49,17 @@ python train_cifar.py app:configs/pyramidnet_randwidth.yml
 |+Mixup|82.5|-|
 |+CutMix|84.08|96.28|
 |+ShakeDrop|81.65|96.19|
-|+GradAug|83.98|96.17|
-|+GradAug+CutMix|**85.35**|**96.85**|
+|+GradAug ([Model](https://drive.google.com/file/d/1KgsNhBDMGwzg4ursr3Zi57ltuiYspM0b/view?usp=sharing))|83.98|96.17|
+|+GradAug+CutMix ([Model](https://drive.google.com/file/d/1Tkr7TLQtst8XnwqPixTXiwLHjN_LbYQQ/view?usp=sharing))|**85.35**|**96.85**|
+
+|PyramidNet-200|Top-1|Top-5|
+|--------------|-----|-----|
+|Baseline|83.49|94.31|
+|+Mixup|84.37|96.01|
+|+CutMix|84.83|86.73|
+|+ShakeDrop|84.57|97.08|
+|+GradAug|84.98|97.08|
+|+GradAug+CutMix ([Model](https://drive.google.com/file/d/1MZXH1u3fVijPF_yj7VoskqjNPOXBscQq/view?usp=sharing))|86.24|97.33|
 
 # Citation
 If you find this useful in your work, please consider citing,
