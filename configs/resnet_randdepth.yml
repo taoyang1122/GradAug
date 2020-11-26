@@ -1,0 +1,35 @@
+# data
+dataset: cifar100
+workers: 0
+
+# info
+num_classes: 100
+image_size: 32
+topk: [1, 5]
+start_epoch: 0
+epochs: 200
+print_freq: 100
+batch_size: 128
+
+# optimizer
+optimizer: sgd
+momentum: 0.9
+weight_decay: 0.0001
+nesterov: True
+
+# lr
+lr: 0.1
+lr_scheduler: cosine
+
+# model
+model: resnet_randdepth
+depth: 56
+max_width: 1.0
+min_width: 0  # min_width=0 indicates sampling sub-networks by depth
+num_subnet: 3
+resos: [32, 28, 24]
+reset_parameters: True
+resume: ''
+log_dir: logs/resnet56_randdepth/
+test_only: False
+pretrained: ''

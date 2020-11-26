@@ -14,6 +14,7 @@ import torchvision.datasets as datasets
 
 from models.wideresnet_randwidth import WideResNet_randwidth
 from models.pyramidnet_randwidth import PyramidNet_randwidth
+import models.resnet_randdepth as resnet_randdepth
 from utils.setlogger import get_logger
 
 from utils.config import FLAGS
@@ -65,6 +66,8 @@ def main():
                                 widen_factor=FLAGS.widen_factor, dropRate=0)
     elif FLAGS.model == 'pyramidnet':
         model = PyramidNet_randwidth(dataset=FLAGS.dataset, depth=200, alpha=240, num_classes=100, bottleneck=True)
+    elif FLAGS.model == 'resnet_randdepth':
+        model = resnet_randdepth.resnet56_cifar(num_classes=FLAGS.dataset == 'cifar10' and 10 or 100)
     else:
         raise NotImplementedError('model type not implemented.')
 
@@ -149,13 +152,15 @@ def train(train_loader, model, criterion, optimizer, scheduler, epoch):
 
         optimizer.zero_grad()
         # GradAug training
-        max_width = FLAGS.max_width
-        min_width = FLAGS.min_width
-        width_mult_list = [min_width]
-        sampled_width = list(np.random.uniform(min_width, max_width, FLAGS.num_subnet-1))
-        width_mult_list.extend(sampled_width)
-
-        model.apply(lambda m: setattr(m, 'width_mult', max_width))
+        if FLAGS.min_width > 0:  # randwidth
+            max_width = FLAGS.max_width
+            min_width = FLAGS.min_width
+            width_mult_list = [min_width]
+            sampled_width = list(np.random.uniform(min_width, max_width, FLAGS.num_subnet-1))
+            width_mult_list.extend(sampled_width)
+            model.apply(lambda m: setattr(m, 'width_mult', max_width))
+        else:  # randdepth
+            model.apply(lambda m: setattr(m, 'fullnet', True))
         max_output = model(input.cuda(non_blocking=True))
         loss = criterion(max_output, target)
         loss.backward()
@@ -164,13 +169,23 @@ def train(train_loader, model, criterion, optimizer, scheduler, epoch):
         top1.update(prec1.item(), input.size(0))
         top5.update(prec5.item(), input.size(0))
         max_output_detach = max_output.detach()
-        for width_mult in sorted(width_mult_list, reverse=True):
-            model.apply(
-                lambda m: setattr(m, 'width_mult', width_mult))
-            resolution = FLAGS.resos[random.randint(0, len(FLAGS.resos)-1)]
-            output = model(F.interpolate(input, (resolution, resolution), mode='bilinear', align_corners=True))
-            loss = torch.nn.KLDivLoss(reduction='batchmean')(F.log_softmax(output, dim=1), F.softmax(max_output_detach, dim=1))
-            loss.backward()
+        if FLAGS.min_width > 0:  # randwidth
+            for width_mult in sorted(width_mult_list, reverse=True):
+                model.apply(
+                    lambda m: setattr(m, 'width_mult', width_mult))
+                resolution = FLAGS.resos[random.randint(0, len(FLAGS.resos)-1)]
+                output = model(F.interpolate(input, (resolution, resolution), mode='bilinear', align_corners=True))
+                loss = torch.nn.KLDivLoss(reduction='batchmean')(F.log_softmax(output, dim=1), F.softmax(max_output_detach, dim=1))
+                loss.backward()
+        else:  # randdepth
+            model.apply(lambda m: setattr(m, 'fullnet', False))
+            for k in range(3):
+                resolution = FLAGS.resos[random.randint(0, len(FLAGS.resos) - 1)]
+                output = model(F.interpolate(input, (resolution, resolution), mode='bilinear', align_corners=True))
+                loss = torch.nn.KLDivLoss(reduction='batchmean')(F.log_softmax(output, dim=1),
+                                                                 F.softmax(max_output_detach, dim=1))
+                loss.backward()
+
 
 
         # compute gradient and do SGD step
@@ -282,10 +297,10 @@ def accuracy(output, target, topk=(1,)):
     return res
 
 def get_lr_scheduler(optimizer, trainloader):
-    if FLAGS.model == 'pyramidnet':
+    if FLAGS.lr_scheduler == 'multistep':
         lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(
             optimizer, milestones=[150, 225], gamma=0.1)
-    elif FLAGS.model == 'wideresnet':
+    elif FLAGS.lr_scheduler == 'cosine':
         lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, FLAGS.epochs*len(trainloader))
     else:
         raise NotImplemented('LR scheduler not implemented.')
