@@ -26,6 +26,11 @@ To train PyramidNet-200,
 ```
 python train_cifar.py app:configs/pyramidnet_randwidth.yml
 ```
+
+3. Generate sub-networks by random depth.
+```
+python train_cifar.py app:configs/resnet_randdepth,yml
+```
 # Results
 1. ImageNet classification accuacy. Note that we report the final-epoch results.
 
