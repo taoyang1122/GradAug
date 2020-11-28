@@ -299,7 +299,7 @@ def accuracy(output, target, topk=(1,)):
 def get_lr_scheduler(optimizer, trainloader):
     if FLAGS.lr_scheduler == 'multistep':
         lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            optimizer, milestones=[150, 225], gamma=0.1)
+            optimizer, milestones=[150*len(trainloader), 225*len(trainloader)], gamma=0.1)
     elif FLAGS.lr_scheduler == 'cosine':
         lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, FLAGS.epochs*len(trainloader))
     else:
