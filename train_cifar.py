@@ -67,7 +67,7 @@ def main():
     elif FLAGS.model == 'pyramidnet':
         model = PyramidNet_randwidth(dataset=FLAGS.dataset, depth=200, alpha=240, num_classes=100, bottleneck=True)
     elif FLAGS.model == 'resnet_randdepth':
-        model = resnet_randdepth.resnet56_cifar(num_classes=FLAGS.dataset == 'cifar10' and 10 or 100)
+        model = resnet_randdepth.resnet110_cifar(num_classes=FLAGS.dataset == 'cifar10' and 10 or 100)
     else:
         raise NotImplementedError('model type not implemented.')
 

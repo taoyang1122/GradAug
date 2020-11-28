@@ -23,13 +23,13 @@ lr_scheduler: cosine
 
 # model
 model: resnet_randdepth
-depth: 56
+depth: 110
 max_width: 1.0
 min_width: 0  # min_width=0 indicates sampling sub-networks by depth
 num_subnet: 3
 resos: [32, 28, 24]
 reset_parameters: True
 resume: ''
-log_dir: logs/resnet56_randdepth/
+log_dir: logs/resnet110_randdepth/
 test_only: False
 pretrained: ''

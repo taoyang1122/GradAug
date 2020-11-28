@@ -145,7 +145,7 @@ def resnet56_cifar(**kwargs):
 
 
 def resnet110_cifar(**kwargs):
-    prob_0_L = [1.0, 0.95]
+    prob_0_L = [1.0, 0.8]
     model = ResNet_Cifar(BasicBlock, prob_0_L, [18, 18, 18], **kwargs)
     return model
 
