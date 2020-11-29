@@ -66,6 +66,14 @@ python train_cifar.py app:configs/resnet_randdepth,yml
 |+GradAug|84.98|97.08|
 |+GradAug+CutMix ([Model](https://drive.google.com/file/d/1MZXH1u3fVijPF_yj7VoskqjNPOXBscQq/view?usp=sharing))|**86.24**|**97.33**|
 
+3. Experiments of generating sub-networks by random depth.
+
+|ResNet-110|Cifar-10|Cifar-100|
+|----------|--------|---------|
+|Baseline|93.59|72.24|
+|StochDepth|94.75|75.02|
+|GradAug-Randdepth|**94.85**|**77.63** ([Model](https://drive.google.com/file/d/1dMw7p2E_sthg3MN0XhURjvi3VZWWTK3h/view?usp=sharing))|
+
 # Citation
 If you find this useful in your work, please consider citing,
 ```
