@@ -72,7 +72,7 @@ python train_cifar.py app:configs/resnet_randdepth,yml
 |----------|--------|---------|
 |Baseline|93.59|72.24|
 |+StochDepth|94.75|75.02|
-|+GradAug-Randdepth|**94.85**|**77.63** ([Model](https://drive.google.com/file/d/1dMw7p2E_sthg3MN0XhURjvi3VZWWTK3h/view?usp=sharing))|
+|+GradAug-Randdepth|**95.77** ([Model](https://drive.google.com/file/d/1YKrsqh6syTvnmS7Wdb_x4RBg1VQXnkB1/view?usp=sharing))|**77.63** ([Model](https://drive.google.com/file/d/1dMw7p2E_sthg3MN0XhURjvi3VZWWTK3h/view?usp=sharing))|
 
 # Citation
 If you find this useful in your work, please consider citing,
