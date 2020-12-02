@@ -63,7 +63,7 @@ python train_cifar.py app:configs/resnet_randdepth,yml
 |+Mixup|84.37|96.01|
 |+CutMix|84.83|96.73|
 |+ShakeDrop|84.57|97.08|
-|+GradAug|84.98|97.08|
+|+GradAug ([Model](https://drive.google.com/file/d/1p_oXkhtdkvmS6fckgmkjV4NDsYegHnl3/view?usp=sharing))|85.53|97.04|
 |+GradAug+CutMix ([Model](https://drive.google.com/file/d/1MZXH1u3fVijPF_yj7VoskqjNPOXBscQq/view?usp=sharing))|**86.24**|**97.33**|
 
 3. Experiments of generating sub-networks by random depth.
