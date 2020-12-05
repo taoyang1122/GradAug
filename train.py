@@ -45,7 +45,7 @@ def main():
     ])
     train_dataset = datasets.ImageFolder(
         traindir,
-        transform=mytransforms.MultiCropsTransform(train_transform)
+        transform=mytransforms.MultiCropsTransform(train_transform, dataset=FLAGS.dataset)
         )
 
     train_sampler = None
