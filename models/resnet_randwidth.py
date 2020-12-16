@@ -95,7 +95,7 @@ class Model(nn.Module):
                 channels = outp
 
         avg_pool_size = input_size // 32
-        self.features.append(nn.AvgPool2d(avg_pool_size))
+        self.features.append(nn.AdaptiveAvgPool2d((1, 1)))
 
         # make it nn.Sequential
         self.features = nn.Sequential(*self.features)

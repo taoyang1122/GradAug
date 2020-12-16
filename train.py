@@ -15,6 +15,7 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import utils.mytransforms as mytransforms
 import numpy as np
+import random
 from utils.config import FLAGS
 from utils.setlogger import get_logger
 
@@ -40,12 +41,12 @@ def main():
             transforms.RandomHorizontalFlip(),
             jittering,
             lighting,
-            # transforms.ToTensor(),
-            # normalize,
+            transforms.ToTensor(),
+            normalize,
     ])
     train_dataset = datasets.ImageFolder(
         traindir,
-        transform=mytransforms.MultiCropsTransform(train_transform, dataset=FLAGS.dataset)
+        transform=train_transform
         )
 
     train_sampler = None
@@ -63,7 +64,7 @@ def main():
         ])),
         batch_size=FLAGS.batch_size//2, shuffle=False,
         num_workers=FLAGS.workers, pin_memory=True)
-    numberofclass = 1000
+    numberofclass = FLAGS.num_classes
 
     model_lib = importlib.import_module(FLAGS.model)
     model = model_lib.Model(depth=FLAGS.depth, num_classes=numberofclass)
@@ -127,49 +128,45 @@ def train(train_loader, model, criterion, optimizer, epoch, lr_scheduler):
 
     end = time.time()
     current_LR = get_learning_rate(optimizer)[0]
-    reso_idx = list(np.random.randint(0, len(FLAGS.resos), FLAGS.num_subnet))
-    train_loader.dataset.transform.set_resoidx(reso_idx)
     for i, (input, target) in enumerate(train_loader):
         # measure data loading time
         data_time.update(time.time() - end)
 
-        # input = input.cuda()
+        input = input.cuda()
         target = target.cuda()
 
         optimizer.zero_grad()
         # first do max_width and max_resolution
         max_width = FLAGS.max_width
         model.apply(lambda m: setattr(m, 'width_mult', max_width))
-        max_output = model(input[0])
+        # max_output = model(input[0])
+        max_output = model(input)
         loss = torch.mean(criterion(max_output, target))
         loss.backward()
         max_output_detach = max_output.detach()
 
         # measure accuracy and record loss
         acc1, acc5 = accuracy(max_output.data, target, topk=(1, 5))
-        losses.update(loss.item(), input[0].size(0))
-        top1.update(acc1.item(), input[0].size(0))
-        top5.update(acc5.item(), input[0].size(0))
+        losses.update(loss.item(), input.size(0))
+        top1.update(acc1.item(), input.size(0))
+        top5.update(acc5.item(), input.size(0))
 
         # do other widths and resolution
         min_width = FLAGS.min_width
         width_mult_list = [min_width]
         sampled_width = list(np.random.uniform(min_width, max_width, FLAGS.num_subnet-1))
         width_mult_list.extend(sampled_width)
-        sub_idx = 1
         for width_mult in sorted(width_mult_list, reverse=True):
             model.apply(
                 lambda m: setattr(m, 'width_mult', width_mult))
-            output = model(input[sub_idx])
-            sub_idx += 1
+            idx = random.randint(0, len(FLAGS.resos) - 1)
+            output = model(F.interpolate(input, (FLAGS.resos[idx], FLAGS.resos[idx]), mode='bilinear', align_corners=True))
             loss = torch.nn.KLDivLoss(reduction='batchmean')(F.log_softmax(output, dim=1),
                                                              F.softmax(max_output_detach, dim=1))
             loss.backward()
 
         optimizer.step()
         lr_scheduler.step()
-        reso_idx = list(np.random.randint(0, len(FLAGS.resos), FLAGS.num_subnet))
-        train_loader.dataset.transform.set_resoidx(reso_idx)
 
         # measure elapsed time
         batch_time.update(time.time() - end)
