@@ -139,7 +139,6 @@ def train(train_loader, model, criterion, optimizer, epoch, lr_scheduler):
         # first do max_width and max_resolution
         max_width = FLAGS.max_width
         model.apply(lambda m: setattr(m, 'width_mult', max_width))
-        # max_output = model(input[0])
         max_output = model(input)
         loss = torch.mean(criterion(max_output, target))
         loss.backward()
